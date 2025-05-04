@@ -1,8 +1,10 @@
+import 'package:blind_view/providers/shopping_provider.dart';
 import 'package:blind_view/screen/cart_screen/cart_screen.dart';
 import 'package:blind_view/screen/history_screen/history_screen.dart';
 import 'package:blind_view/screen/scan_screen/scan_screen.dart';
 import 'package:blind_view/screen/settings_screen/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -26,6 +28,16 @@ class _MainScreenState extends State<MainScreen> {
     HistoryScreen(),
     SettingsScreen()
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((callback){
+      Provider.of<ShoppingProvider>(context,listen: false).getItems();
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {

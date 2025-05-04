@@ -1,0 +1,33 @@
+
+import 'package:blind_view/models/item.dart';
+import 'package:blind_view/repository/shopping_repo.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+
+class ShoppingProvider with ChangeNotifier{
+
+  final ShoppingRepo _shoppingRepo = ShoppingRepo();
+  List <Item> _items= [];
+  Response? _response;
+
+  List<Item> get items => _items;
+
+  Future<void> getItems() async{
+    try{
+      _response = await _shoppingRepo.getItem();
+      if(_response!=null && _response!.statusCode == 200){
+        var data = _response!.data;
+        data.forEach((element){
+          _items.add(Item.fromJson(element));
+        });
+        notifyListeners();
+      }
+      else{
+        print("${_response?.statusCode} = ${_response?.statusMessage}");
+      }
+    }catch(e){
+      print(e);
+    }
+
+  }
+}
