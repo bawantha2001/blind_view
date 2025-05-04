@@ -6,16 +6,25 @@ import 'package:flutter/cupertino.dart';
 
 class ShoppingProvider with ChangeNotifier{
 
+  ShoppingProvider();
   final ShoppingRepo _shoppingRepo = ShoppingRepo();
+
   List <Item> _items= [];
   Response? _response;
 
   List<Item> get items => _items;
 
-  Future<void> getItems() async{
+  Future<void> getItems({bool isRefresh = false}) async{
+
+    if(isRefresh == true){
+      _items= [];
+      notifyListeners();
+    }
+
     try{
       _response = await _shoppingRepo.getItem();
       if(_response!=null && _response!.statusCode == 200){
+        _items = [];
         var data = _response!.data;
         data.forEach((element){
           _items.add(Item.fromJson(element));
