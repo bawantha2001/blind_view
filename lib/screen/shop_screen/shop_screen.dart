@@ -85,12 +85,10 @@ class _ShopScreenState extends State<ShopScreen> {
                       Text("Featured Items",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w800)),
                       SizedBox(height: 10,),
                       Consumer<ShoppingProvider>(builder: (context, shop_item, child) {
-                        return shop_item.items != null?
-                        Container(
+                        return shop_item.items != null && shop_item.isLoading != true? Container(
                           width: MediaQuery.of(context).size.width,
                           height: 220,
-                          child:
-                          ListView.builder(scrollDirection: Axis.horizontal,itemCount: shop_item.items.length ,itemBuilder: (context, index) {
+                          child: ListView.builder(scrollDirection: Axis.horizontal,itemCount: shop_item.items.length ,itemBuilder: (context, index) {
                               return Padding(
                                 padding: const EdgeInsets.all(7.0),
                                 child: Container(
@@ -123,7 +121,17 @@ class _ShopScreenState extends State<ShopScreen> {
                               );
                               },
                           ),
-                        ): SizedBox();
+                        ): Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 220,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(color: Colors.blue,)
+                            ],
+                          ),
+                        );
                       },
                       ),
                       SizedBox(height: 20,),
