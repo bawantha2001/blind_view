@@ -1,5 +1,7 @@
 import 'package:blind_view/providers/shopping_provider.dart';
+import 'package:blind_view/screen/shop_screen/mobileScanner_Screen/scanner_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -25,7 +27,6 @@ class _ShopScreenState extends State<ShopScreen> {
     Provider.of<ShoppingProvider>(context,listen: false).getItems(isRefresh: true);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,8 +38,6 @@ class _ShopScreenState extends State<ShopScreen> {
             child: ListView(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.height,
                   color: Color.fromRGBO(248, 249, 250, 1),
                   padding: EdgeInsets.symmetric(horizontal:20,vertical: 15),
                   child: Column(
@@ -48,18 +47,23 @@ class _ShopScreenState extends State<ShopScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 25,vertical: 15),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.camera_alt_outlined,color: Colors.white,),
-                                SizedBox(width: 5,),
-                                Text("Scan Item",style: TextStyle(color: Colors.white),)
-                              ],
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ScannerScreen(),));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 25,vertical: 15),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.blue
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.camera_alt_outlined,color: Colors.white,),
+                                  SizedBox(width: 5,),
+                                  Text("Scan Item",style: TextStyle(color: Colors.white),)
+                                ],
+                              ),
                             ),
                           ),
 
