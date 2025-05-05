@@ -1,6 +1,6 @@
 import 'package:blind_view/providers/shopping_provider.dart';
+import 'package:blind_view/screen/cart_screen/cart_screen.dart';
 import 'package:blind_view/screen/settings_screen/settings_screen.dart';
-import 'package:blind_view/screen/voice_screen/voice_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
     ShopScreen(),
     ListScreen(),
-    VoiceScreen(),
+    CartScreen(),
     SettingsScreen()
   ];
 
@@ -40,9 +40,9 @@ class _MainScreenState extends State<MainScreen> {
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
           items:[
-            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_outlined),label: "Shop" ),
+            BottomNavigationBarItem(icon: Icon(Icons.shopify_rounded),label: "Shop" ),
             BottomNavigationBarItem(icon: Icon(Icons.list),label: "List" ),
-            BottomNavigationBarItem(icon: Icon(Icons.keyboard_voice),label: "Voice" ),
+            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_rounded),label: "Cart" ),
             BottomNavigationBarItem(icon: Icon(Icons.settings),label: "Settings" ),
           ],
         enableFeedback: true,

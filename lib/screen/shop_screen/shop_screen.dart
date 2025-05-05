@@ -14,7 +14,6 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
-  final VoiceToText _voiceToText = VoiceToText();
 
   @override
   void initState() {
@@ -22,26 +21,8 @@ class _ShopScreenState extends State<ShopScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((callback){
       Provider.of<ShoppingProvider>(context,listen: false).getItems();
-      initVoicetoText();
     });
 
-  }
-
-  void initVoicetoText(){
-    _voiceToText.initSpeech();
-    _voiceToText.addListener(() {
-      if(_voiceToText.isListening){
-        showListening();
-      }else{
-        try{
-          Navigator.pop(context);
-        }catch(e){
-
-        }
-        print(_voiceToText.speechResult);
-      }
-    },
-    );
   }
 
   void refresh(){
@@ -51,6 +32,10 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text("Welcome to Shopeyes",style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.w800)),
+      ),
       body: SafeArea(
           child: RefreshIndicator(
             onRefresh: () async{
@@ -65,57 +50,6 @@ class _ShopScreenState extends State<ShopScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => ScannerScreen(),));
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 25,vertical: 15),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blue
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.camera_alt_outlined,color: Colors.white,),
-                                  SizedBox(width: 5,),
-                                  Text("Scan Item",style: TextStyle(color: Colors.white),)
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(width: 20,),
-
-                          GestureDetector(
-                            onTap: (){
-                              if(_voiceToText.isNotListening){
-                                _voiceToText.startListening();
-                              }else{
-                                _voiceToText.stop();
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 25,vertical: 15),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blue
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.mic_none_rounded,color: Colors.white,),
-                                  SizedBox(width: 5,),
-                                  Text("Voice Search",style: TextStyle(color: Colors.white))
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20,),
                       Text("Featured Items",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w800)),
                       SizedBox(height: 10,),
                       Consumer<ShoppingProvider>(builder: (context, shop_item, child) {
@@ -208,6 +142,119 @@ class _ShopScreenState extends State<ShopScreen> {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: EdgeInsets.all(25),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.4),blurRadius: 1,offset: Offset(-4, 4))],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.spatial_audio_off ,size: 30,color: Colors.blue,),
+                                      SizedBox(width: 5,),
+                                      Column(
+                                        children: [
+                                          Text("Available Commands",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 5),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(Icons.circle,size: 8,color: Colors.grey),
+                                            SizedBox(width: 5,),
+                                            Text("\"Add  [item] to cart\"",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w400),),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5,),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.circle,size: 8,color: Colors.grey),
+                                            SizedBox(width: 5,),
+                                            Text("\"Create new list\"",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w400),),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5,),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.circle,size: 8,color: Colors.grey),
+                                            SizedBox(width: 5,),
+                                            Text("\"Show my lists\"",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w400),),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: Container(
+                                    height: 150,
+                                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.4),blurRadius: 1,offset: Offset(-4, 4))],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Text("Speak Clearly",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),),
+                                        SizedBox(height: 10,),
+                                        Text("Use a clear voice and speak at a normal nace",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w400),),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Flexible(
+                                  child: Container(
+                                    height: 150,
+                                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.4),blurRadius: 1,offset: Offset(-4, 4))],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Text("Be Specific",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),),
+                                        SizedBox(height: 10,),
+                                        Text("Mention item names and quantities clearly",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w400),),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -215,29 +262,6 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
           )
       ),
-    );
-  }
-  
-  void showListening(){
-    showDialog(
-      barrierDismissible: false,
-        context: context, 
-        builder: (BuildContext context) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 100,
-                width: 105,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Image.asset("assets/images/voice.gif")
-              ),
-            ],
-          );
-        },
     );
   }
 }
