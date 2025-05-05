@@ -20,6 +20,8 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   mobile_scanner: ^6.0.10
   shake: ^3.0.0
+  voice_to_text: ^1.0.3
+  flutter_beep: ^1.0.0
 
 dev_dependencies:
   flutter_test:

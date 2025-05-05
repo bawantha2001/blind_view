@@ -1,8 +1,10 @@
 import 'package:blind_view/providers/shopping_provider.dart';
 import 'package:blind_view/screen/shop_screen/mobileScanner_Screen/scanner_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_beep/flutter_beep.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
+import 'package:voice_to_text/voice_to_text.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -12,6 +14,7 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
+  final VoiceToText _voiceToText = VoiceToText();
 
   @override
   void initState() {
@@ -19,8 +22,26 @@ class _ShopScreenState extends State<ShopScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((callback){
       Provider.of<ShoppingProvider>(context,listen: false).getItems();
+      initVoicetoText();
     });
 
+  }
+
+  void initVoicetoText(){
+    _voiceToText.initSpeech();
+    _voiceToText.addListener(() {
+      if(_voiceToText.isListening){
+        showListening();
+      }else{
+        try{
+          Navigator.pop(context);
+        }catch(e){
+
+        }
+        print(_voiceToText.speechResult);
+      }
+    },
+    );
   }
 
   void refresh(){
@@ -69,18 +90,27 @@ class _ShopScreenState extends State<ShopScreen> {
 
                           SizedBox(width: 20,),
 
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 25,vertical: 15),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.mic_none_rounded,color: Colors.white,),
-                                SizedBox(width: 5,),
-                                Text("Voice Search",style: TextStyle(color: Colors.white))
-                              ],
+                          GestureDetector(
+                            onTap: (){
+                              if(_voiceToText.isNotListening){
+                                _voiceToText.startListening();
+                              }else{
+                                _voiceToText.stop();
+                              }
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 25,vertical: 15),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.blue
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.mic_none_rounded,color: Colors.white,),
+                                  SizedBox(width: 5,),
+                                  Text("Voice Search",style: TextStyle(color: Colors.white))
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -185,6 +215,29 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
           )
       ),
+    );
+  }
+  
+  void showListening(){
+    showDialog(
+      barrierDismissible: false,
+        context: context, 
+        builder: (BuildContext context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 100,
+                width: 105,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Image.asset("assets/images/voice.gif")
+              ),
+            ],
+          );
+        },
     );
   }
 }

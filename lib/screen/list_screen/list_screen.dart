@@ -34,7 +34,7 @@ class _ListScreenState extends State<ListScreen> {
           }
         },
         useFilter: false,
-        shakeThresholdGravity: 1.5
+        shakeThresholdGravity: 1.1
     );
   }
 
