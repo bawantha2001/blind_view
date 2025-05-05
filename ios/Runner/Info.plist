@@ -30,6 +30,10 @@
     <string>This app needs camera access to scan QR codes</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>This app needs photos access to get QR code from photo library</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>This app needs called Privacy - Speech Recognition</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app needs called Privacy - Microphone Usage</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>

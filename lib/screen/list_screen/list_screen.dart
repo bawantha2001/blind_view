@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shake/shake.dart';
+import 'package:voice_to_text/voice_to_text.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
@@ -9,40 +10,23 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+  final VoiceToText _voiceToText = VoiceToText();
 
-  ShakeDetector? shakeDetector;
+  void initVoicetoText(){
+    _voiceToText.initSpeech();
+    _voiceToText.addListener(() {
+      if(_voiceToText.isListening){
+        showListening();
+      }else{
+        try{
+          Navigator.pop(context);
+        }catch(e){
 
-
-  void shakeStarter(){
-    shakeDetector?.stopListening();
-
-    shakeDetector = ShakeDetector.autoStart(
-        onPhoneShake: (event) {
-          switch (event.direction){
-            case ShakeDirection.x:
-              print("left right detected");
-              break;
-            case ShakeDirection.y:
-              print("left right detected");
-              break;
-            case ShakeDirection.z:
-              print("left right detected");
-              break;
-            case ShakeDirection.undefined:
-              print("left right detected");
-              break;
-          }
-        },
-        useFilter: false,
-        shakeThresholdGravity: 1.5
+        }
+        print(_voiceToText.speechResult);
+      }
+    },
     );
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    shakeDetector?.stopListening();
   }
 
   @override
@@ -50,7 +34,7 @@ class _ListScreenState extends State<ListScreen> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((callback){
-      shakeStarter();
+      initVoicetoText();
     });
   }
   @override
@@ -68,7 +52,11 @@ class _ListScreenState extends State<ListScreen> {
       ),
       floatingActionButton: GestureDetector(
         onTap: (){
-
+          if(_voiceToText.isNotListening){
+            _voiceToText.startListening();
+          }else{
+            _voiceToText.stop();
+          }
         },
         child: Container(
           height: 60,
@@ -78,7 +66,7 @@ class _ListScreenState extends State<ListScreen> {
             borderRadius: BorderRadius.circular(60),
             color: Colors.blue
           ),
-          child: Icon(Icons.add,color: Colors.white,),
+          child: Icon(Icons.mic_none_rounded,color: Colors.white,),
         ),
       ),
       body: SafeArea(
@@ -107,6 +95,28 @@ class _ListScreenState extends State<ListScreen> {
             ],
           )
       ),
+    );
+  }
+  void showListening(){
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                height: 100,
+                width: 105,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Image.asset("assets/images/voice.gif")
+            ),
+          ],
+        );
+      },
     );
   }
 }
