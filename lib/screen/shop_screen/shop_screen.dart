@@ -53,7 +53,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       Text("Featured Items",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w800)),
                       SizedBox(height: 10,),
                       Consumer<ShoppingProvider>(builder: (context, shop_item, child) {
-                        return shop_item.items != null && shop_item.isLoading != true? Container(
+                        return shop_item.items != null && !shop_item.isLoading? Container(
                           width: MediaQuery.of(context).size.width,
                           height: 220,
                           child: ListView.builder(scrollDirection: Axis.horizontal,itemCount: shop_item.items.length ,itemBuilder: (context, index) {

@@ -1,4 +1,7 @@
+import 'package:blind_view/providers/shopping_provider.dart';
+import 'package:blind_view/screen/list_screen/widgets/products_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shake/shake.dart';
 import 'package:voice_to_text/voice_to_text.dart';
 
@@ -11,6 +14,7 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
   final VoiceToText _voiceToText = VoiceToText();
+  String catName = "";
 
   void initVoicetoText(){
     _voiceToText.initSpeech();
@@ -23,7 +27,16 @@ class _ListScreenState extends State<ListScreen> {
         }catch(e){
 
         }
+        setState(() {
+          catName = _voiceToText.speechResult;
+        });
+
         print(_voiceToText.speechResult);
+        Provider.of<ShoppingProvider>(context,listen: false).categoryName.forEach((element){
+          if(element.toLowerCase()==catName.toLowerCase()){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsScreen(catergory: element),));
+          }
+        });
       }
     },
     );
@@ -37,6 +50,7 @@ class _ListScreenState extends State<ListScreen> {
       initVoicetoText();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +58,7 @@ class _ListScreenState extends State<ListScreen> {
         backgroundColor: Colors.white,
         title: Row(
           children: [
-            Text("Shopping Lists",style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.w800)),
+            Text("Shopping Categories",style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.w800)),
             Spacer(),
             Icon(Icons.star_border_outlined,size: 30,color: Colors.blue,)
           ],
@@ -86,8 +100,50 @@ class _ListScreenState extends State<ListScreen> {
                         fillColor: Colors.grey.withOpacity(0.2),
                         filled: true,
                         prefixIcon: Icon(Icons.search,color: Colors.grey,),
-                        hintText: "Search lists..."
+                        hintText: "Search Categories..."
                       ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Consumer<ShoppingProvider>(builder: (context, shopping, child) {
+                        return  shopping.categoryName!=null && !shopping.isLoading?ListView.builder(
+                          itemCount: shopping.categoryName.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: GestureDetector(
+                                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsScreen(catergory: shopping.categoryName.elementAt(index)),)),
+                                child: Container(
+                                  height: 90,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.4),blurRadius: 1,offset: Offset(-4, 4))],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      ClipRRect(
+                                          child: Image.asset("assets/images/test.jpg",fit: BoxFit.fill,),
+                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft:Radius.circular(10) ),
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Text("${shopping.categoryName.elementAt(index)}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),),
+                                      Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(Icons.input_rounded,color: Colors.blue,),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                        },
+                        ):SizedBox();
+                      }),
                     )
                   ],
                 ),
