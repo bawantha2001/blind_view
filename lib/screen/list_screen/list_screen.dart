@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shake/shake.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
@@ -8,6 +9,50 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+
+  ShakeDetector? shakeDetector;
+
+
+  void shakeStarter(){
+    shakeDetector?.stopListening();
+
+    shakeDetector = ShakeDetector.autoStart(
+        onPhoneShake: (event) {
+          switch (event.direction){
+            case ShakeDirection.x:
+              print("left right detected");
+              break;
+            case ShakeDirection.y:
+              print("left right detected");
+              break;
+            case ShakeDirection.z:
+              print("left right detected");
+              break;
+            case ShakeDirection.undefined:
+              print("left right detected");
+              break;
+          }
+        },
+        useFilter: false,
+        shakeThresholdGravity: 1.5
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    shakeDetector?.stopListening();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((callback){
+      shakeStarter();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
