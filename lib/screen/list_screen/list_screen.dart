@@ -40,8 +40,6 @@ class _ListScreenState extends State<ListScreen> {
           child: ListView(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.height,
                 color: Color.fromRGBO(248, 249, 250, 1),
                 padding: EdgeInsets.symmetric(horizontal:20,vertical: 15),
                 child: Column(

@@ -10,14 +10,18 @@ class ShoppingProvider with ChangeNotifier{
   final ShoppingRepo _shoppingRepo = ShoppingRepo();
 
   List <Item> _items= [];
+  bool isLoading = false;
   Response? _response;
 
   List<Item> get items => _items;
 
   Future<void> getItems({bool isRefresh = false}) async{
 
+    isLoading = true;
+    notifyListeners();
+
     if(isRefresh == true){
-      _items= [];
+      _items = [];
       notifyListeners();
     }
 
@@ -34,8 +38,13 @@ class ShoppingProvider with ChangeNotifier{
       else{
         print("${_response?.statusCode} = ${_response?.statusMessage}");
       }
+
+      isLoading = false;
+      notifyListeners();
     }catch(e){
       print(e);
+      isLoading = false;
+      notifyListeners();
     }
 
   }
