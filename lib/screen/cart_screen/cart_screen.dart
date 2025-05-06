@@ -46,7 +46,10 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    shakeStarter();
+    WidgetsBinding.instance.addPostFrameCallback((callback){
+      shakeStarter();
+      Provider.of<ShoppingProvider>(context,listen: false).calculateTotal();
+    });
   }
 
 
@@ -66,11 +69,15 @@ class _CartScreenState extends State<CartScreen> {
           children: [
             Text("Your Cart",style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.w800)),
             Spacer(),
-            GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ScannerScreen(),));
-              },
-                child: Icon(Icons.qr_code,size: 30,color: Colors.blue,))
+            Consumer<ShoppingProvider>(builder: (BuildContext context, shopping, Widget? child) {
+              return Text("Total: ${shopping.total.toDouble().toStringAsFixed(2)}",style: TextStyle(color: Colors.red),);
+            }),
+            // GestureDetector(
+            //   onTap: (){
+            //     Navigator.push(context, MaterialPageRoute(builder: (context) => ScannerScreen(),));
+            //   },
+            //     child: Icon(Icons.qr_code,size: 30,color: Colors.blue,)
+            // )
           ],
         ),
       ),
@@ -110,7 +117,6 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           Spacer(),
                           Text("${shopping.cart.elementAt(index).itemQuantity}",style: TextStyle(color: Colors.red,fontWeight: FontWeight.w800),),
-                          Icon(Icons.add_shopping_cart_rounded)
                         ],
                       ),
                     )

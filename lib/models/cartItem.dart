@@ -1,8 +1,8 @@
 class CartItem{
   final String? itemCode;
   final String? itemName;
-  final int? itemQuantity;
-  final int? itemPrice;
+  int? itemQuantity;
+  int? itemPrice;
 
   CartItem({this.itemCode,this.itemName,this.itemPrice,this.itemQuantity});
 
