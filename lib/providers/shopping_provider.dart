@@ -16,11 +16,13 @@ class ShoppingProvider with ChangeNotifier{
   List<CartItem> _cart =[];
   bool isLoading = false;
   Response? _response;
+  int _total=0;
 
   List<Item> get items => _items;
   List<String> get categoryName=>_categoryName;
   Map<String,List <Item>> get categorizedItems => _categorizedItems;
   List<CartItem> get cart => _cart;
+  int get total => _total;
 
 
   Future<void> getItems({bool isRefresh = false}) async{
@@ -70,14 +72,48 @@ class ShoppingProvider with ChangeNotifier{
   }
 
   void addItemToCart(Item item,int quantity){
-    Map<String,dynamic> data ={
-      'itemCode':'${item.itemCode}',
-      'itemName':'${item.itemName}',
-      'itemQuantity':quantity,
-      'itemPrice':item.itemPrice! * quantity
-    };
-    _cart.add(CartItem.fromJson(data));
-    print(_cart.length);
+    if(_cart.isEmpty){
+      Map<String,dynamic> data ={
+        'itemCode':'${item.itemCode}',
+        'itemName':'${item.itemName}',
+        'itemQuantity':quantity,
+        'itemPrice':item.itemPrice! * quantity
+      };
+      _cart.add(CartItem.fromJson(data));
+    }
+    else{
+      CartItem? foundItem;
+      try{
+        foundItem = _cart.firstWhere((element) => element.itemCode == item.itemCode,);
+      }catch(e){
+        print(e);
+      }
+
+      if(foundItem != null){
+        int indexOfFoundItem = _cart.indexOf(foundItem);
+        _cart[indexOfFoundItem].itemQuantity = (_cart[indexOfFoundItem].itemQuantity??0) + quantity!;
+        _cart[indexOfFoundItem].itemPrice = (item.itemPrice??0) * _cart[indexOfFoundItem].itemQuantity!;
+      }
+      else{
+        Map<String,dynamic> data ={
+          'itemCode':'${item.itemCode}',
+          'itemName':'${item.itemName}',
+          'itemQuantity':quantity,
+          'itemPrice':item.itemPrice! * quantity
+        };
+        _cart.add(CartItem.fromJson(data));
+      }
+    }
     notifyListeners();
   }
+
+  void calculateTotal(){
+    _total =0;
+    _cart.forEach((element) {
+      _total += element.itemPrice!;
+    },
+    );
+    notifyListeners();
+  }
+
 }
