@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shake/shake.dart';
 
 import '../../providers/shopping_provider.dart';
-import '../shop_screen/mobileScanner_Screen/scanner_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -24,7 +23,7 @@ class _CartScreenState extends State<CartScreen> {
         onPhoneShake: (event) {
           switch (event.direction){
             case ShakeDirection.x:
-              print("left right detected");
+              Provider.of<ShoppingProvider>(context,listen: false).loadCartfav();
               break;
             case ShakeDirection.y:
               print("left right detected");
@@ -70,14 +69,27 @@ class _CartScreenState extends State<CartScreen> {
             Text("Your Cart",style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.w800)),
             Spacer(),
             Consumer<ShoppingProvider>(builder: (BuildContext context, shopping, Widget? child) {
-              return Text("Total: ${shopping.total.toDouble().toStringAsFixed(2)}",style: TextStyle(color: Colors.red),);
+              return Row(
+                children: [
+                  shopping.cart.isNotEmpty?GestureDetector(
+                      child: Icon(Icons.favorite_border),
+                    onTap: (){
+                        Provider.of<ShoppingProvider>(context,listen: false).saveCartinFav(shopping.cart);
+                    },
+                  ):SizedBox(),
+                  SizedBox(width: 10,),
+                  Text("Total: ${shopping.total.toDouble().toStringAsFixed(2)}",style: TextStyle(color: Colors.red),),
+                ],
+              );
             }),
+
             // GestureDetector(
             //   onTap: (){
             //     Navigator.push(context, MaterialPageRoute(builder: (context) => ScannerScreen(),));
             //   },
             //     child: Icon(Icons.qr_code,size: 30,color: Colors.blue,)
             // )
+
           ],
         ),
       ),
@@ -85,7 +97,7 @@ class _CartScreenState extends State<CartScreen> {
         color: Color.fromRGBO(248, 249, 250, 1),
         padding: EdgeInsets.symmetric(horizontal:20,vertical: 15),
         child: Consumer<ShoppingProvider>(builder: (context, shopping, child) {
-          return GridView.builder(itemCount: shopping.cart.length,gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          return shopping.cart.isNotEmpty?GridView.builder(itemCount: shopping.cart.length,gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
             itemBuilder: (context, index) {
               return Container(
@@ -116,15 +128,37 @@ class _CartScreenState extends State<CartScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                           ),
                           Spacer(),
-                          Text("${shopping.cart.elementAt(index).itemQuantity}",style: TextStyle(color: Colors.red,fontWeight: FontWeight.w800),),
+                          Row(
+                            children: [
+                              Text("${shopping.cart.elementAt(index).itemQuantity}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w800),),
+                              SizedBox(width: 10,),
+                              GestureDetector(
+                                onTap: (){
+                                  Provider.of<ShoppingProvider>(context,listen: false).removeCart(index);
+                                },
+                                  child: Icon(Icons.delete,size: 30,))
+                            ],
+                          ),
                         ],
                       ),
                     )
                   ],
                 ),
               );
-            },);
-        },),
+            },
+          ):Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset("assets/images/cart_screen.png",width: 250,height: 250,),
+                Text("Your cart is empty"),
+              ],
+            ),
+          );
+        },
+        ),
       ),
     );
   }

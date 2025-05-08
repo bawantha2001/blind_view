@@ -11,7 +11,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   final MobileScannerController _mobileScannerControllercontroller = MobileScannerController();
 
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -29,26 +28,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
             onDetect: (result){
               print(result.barcodes.first.rawValue);
             },
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.white
-                    ),
-                    child: Icon(Icons.arrow_back_rounded,color: Colors.blue,),
-                  ),
-                ),
-              ),
-            ),
           ),
           Align(
             alignment: Alignment.center,

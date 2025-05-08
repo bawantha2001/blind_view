@@ -3,9 +3,11 @@ import 'package:blind_view/screen/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    MultiProvider(providers: [
+    MultiProvider(
+      providers: [
       ChangeNotifierProvider(create: (context) => ShoppingProvider(),),
     ],
     child: MyApp(),

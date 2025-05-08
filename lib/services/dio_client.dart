@@ -9,7 +9,7 @@ class DioClient {
 
   DioClient._internal(){
     final options = BaseOptions(
-      baseUrl: "http://10.174.206.178:8070",
+      baseUrl: "http://192.168.8.101:8070",
       connectTimeout: Duration(seconds: 10),
       receiveTimeout: Duration(seconds: 10),
       sendTimeout: Duration(seconds: 10),
@@ -33,7 +33,6 @@ class DioClient {
     //     return handler.next(options);
     //   },
     // ));
-
   }
 
 }

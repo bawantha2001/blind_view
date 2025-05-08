@@ -1,9 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:blind_view/models/cartItem.dart';
 import 'package:blind_view/models/item.dart';
 import 'package:blind_view/repository/shopping_repo.dart';
+import 'package:blind_view/services/voice_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShoppingProvider with ChangeNotifier{
 
@@ -73,14 +77,17 @@ class ShoppingProvider with ChangeNotifier{
 
   void addItemToCart(Item item,int quantity){
     if(_cart.isEmpty){
-      Map<String,dynamic> data ={
+
+      Map<String,dynamic> data = {
         'itemCode':'${item.itemCode}',
         'itemName':'${item.itemName}',
         'itemQuantity':quantity,
         'itemPrice':item.itemPrice! * quantity
       };
+
       _cart.add(CartItem.fromJson(data));
     }
+
     else{
       CartItem? foundItem;
       try{
@@ -114,6 +121,49 @@ class ShoppingProvider with ChangeNotifier{
     },
     );
     notifyListeners();
+  }
+
+  void removeCart(int elementNo){
+    if(_cart != null){
+      VoiceService().speak("${_cart.elementAt(elementNo).itemName} removed from Cart");
+      _cart.removeAt(elementNo);
+      calculateTotal();
+    }
+   notifyListeners();
+  }
+
+  Future<void> saveCartinFav(List<CartItem> favCart) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final cartJson = jsonEncode(favCart.map((e) => e.toJson()).toList());
+    await prefs.setString('favCart', cartJson).then((onValue){
+      VoiceService().speak("Items added to favourite");
+    });
+    print("saved successfull");
+  }
+
+
+
+  Future<void> loadCartfav()async{
+    final prefs = await SharedPreferences.getInstance();
+    final favCartjson = prefs.getString("favCart");
+
+    if(favCartjson !=null){
+      final List<dynamic> cartList = jsonDecode(favCartjson);
+      _cart = [];
+      _total = 0;
+      notifyListeners();
+
+      cartList.forEach((element) {
+        _cart.add(CartItem.fromJson(element));
+      },);
+      VoiceService().speak("Items loaded");
+      notifyListeners();
+      calculateTotal();
+    }
+    else{
+      print("No Cart Items");
+    }
+
   }
 
 }

@@ -1,5 +1,6 @@
 import 'package:blind_view/providers/shopping_provider.dart';
 import 'package:blind_view/screen/list_screen/widgets/products_screen.dart';
+import 'package:blind_view/services/voice_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shake/shake.dart';
@@ -34,6 +35,7 @@ class _ListScreenState extends State<ListScreen> {
         print(_voiceToText.speechResult);
         Provider.of<ShoppingProvider>(context,listen: false).categoryName.forEach((element){
           if(element.toLowerCase()==catName.toLowerCase()){
+            VoiceService().speak("Showing $catName");
             Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsScreen(catergory: element),));
           }
         });
@@ -108,13 +110,16 @@ class _ListScreenState extends State<ListScreen> {
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
                       child: Consumer<ShoppingProvider>(builder: (context, shopping, child) {
-                        return  shopping.categoryName!=null && !shopping.isLoading?ListView.builder(
+                        return  shopping.categoryName.isNotEmpty && !shopping.isLoading?ListView.builder(
                           itemCount: shopping.categoryName.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               child: GestureDetector(
-                                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsScreen(catergory: shopping.categoryName.elementAt(index)),)),
+                                onTap: () {
+                                  VoiceService().speak(shopping.categoryName.elementAt(index));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsScreen(catergory: shopping.categoryName.elementAt(index)),));
+                                },
                                 child: Container(
                                   height: 90,
                                   width: MediaQuery.of(context).size.width,
@@ -142,8 +147,13 @@ class _ListScreenState extends State<ListScreen> {
                               ),
                             );
                         },
-                        ):SizedBox();
-                      }),
+                        ):Column(
+                          children: [
+                            Image.asset("assets/images/images.png",width: 250,height: 250,),
+                          ],
+                        );
+                      }
+                      ),
                     )
                   ],
                 ),
@@ -153,6 +163,7 @@ class _ListScreenState extends State<ListScreen> {
       ),
     );
   }
+
   void showListening(){
     showDialog(
       barrierDismissible: false,
@@ -175,4 +186,5 @@ class _ListScreenState extends State<ListScreen> {
       },
     );
   }
+
 }

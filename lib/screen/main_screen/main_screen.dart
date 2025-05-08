@@ -1,10 +1,9 @@
-import 'package:blind_view/providers/shopping_provider.dart';
 import 'package:blind_view/screen/cart_screen/cart_screen.dart';
-import 'package:blind_view/screen/settings_screen/settings_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+import '../../services/voice_service.dart';
 import '../list_screen/list_screen.dart';
+import '../shop_screen/mobileScanner_Screen/scanner_screen.dart';
 import '../shop_screen/shop_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -23,11 +22,18 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    VoiceService().speak("Welcome to Shop Eyes");
+  }
+
   List<Widget> screens = [
     ShopScreen(),
     ListScreen(),
     CartScreen(),
-    SettingsScreen()
+    ScannerScreen()
   ];
 
   @override
@@ -43,7 +49,7 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavigationBarItem(icon: Icon(Icons.shopify_rounded),label: "Shop" ),
             BottomNavigationBarItem(icon: Icon(Icons.list),label: "List" ),
             BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_rounded),label: "Cart" ),
-            BottomNavigationBarItem(icon: Icon(Icons.settings),label: "Settings" ),
+            BottomNavigationBarItem(icon: Icon(Icons.qr_code_2_rounded),label: "Qr" ),
           ],
         enableFeedback: true,
         currentIndex: current_screen,

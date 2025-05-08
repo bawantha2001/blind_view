@@ -1,10 +1,8 @@
 import 'package:blind_view/providers/shopping_provider.dart';
-import 'package:blind_view/screen/shop_screen/mobileScanner_Screen/scanner_screen.dart';
+import 'package:blind_view/services/voice_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_beep/flutter_beep.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
-import 'package:voice_to_text/voice_to_text.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -22,7 +20,6 @@ class _ShopScreenState extends State<ShopScreen> {
     WidgetsBinding.instance.addPostFrameCallback((callback){
       Provider.of<ShoppingProvider>(context,listen: false).getItems();
     });
-
   }
 
   void refresh(){
