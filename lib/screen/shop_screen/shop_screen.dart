@@ -70,11 +70,13 @@ class _ShopScreenState extends State<ShopScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Flexible(child: ClipRRect(borderRadius: BorderRadius.only(topRight: Radius.circular(10),topLeft: Radius.circular(10)),
-                                          child: CachedNetworkImage(
-                                            imageUrl: shop_item.items[index].itemImage.toString(),
-                                            placeholder: (context, url) => Image.asset("assets/images/load.gif",fit: BoxFit.cover),
-                                            errorWidget: (context, url, error) => Image.asset("assets/images/no_item.png",fit: BoxFit.cover),
-                                            fit: BoxFit.cover,
+                                          child: Center(
+                                            child: CachedNetworkImage(
+                                              imageUrl: shop_item.items[index].itemImage.toString(),
+                                              placeholder: (context, url) => Image.asset("assets/images/load.gif",fit: BoxFit.cover),
+                                              errorWidget: (context, url, error) => Image.asset("assets/images/no_item.png",fit: BoxFit.cover),
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),)),
                                       SizedBox(height: 10,),
                                       Padding(
