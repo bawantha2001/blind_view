@@ -1,5 +1,9 @@
+import 'package:blind_view/providers/shopping_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
+
+import '../../../services/voice_service.dart';
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
 
@@ -11,6 +15,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   final MobileScannerController _mobileScannerControllercontroller = MobileScannerController();
 
+  bool isScanning = true;
 
   @override
   void dispose() {
@@ -24,35 +29,32 @@ class _ScannerScreenState extends State<ScannerScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          MobileScanner(
-            controller: _mobileScannerControllercontroller,
-            onDetect: (result){
-              print(result.barcodes.first.rawValue);
+          Consumer<ShoppingProvider>(
+            builder: (BuildContext context,shopping, Widget? child) {
+              return MobileScanner(
+                controller: _mobileScannerControllercontroller,
+                onDetect: (result){
+                  String id = result.barcodes.first.rawValue.toString();
+                  shopping.items.forEach((element) {
+                    if(element.itemCode == id){
+                      _mobileScannerControllercontroller.stop().then((onValue){
+                        setState(() {
+                          isScanning = false;
+                        });
+                        Provider.of<ShoppingProvider>(context,listen: false).addItemToCart(element, 1);
+                        VoiceService().speak("${element.itemName} added to the Cart");
+                      });
+
+                    }
+                  },);
+
+                },
+              );
             },
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.white
-                    ),
-                    child: Icon(Icons.arrow_back_rounded,color: Colors.blue,),
-                  ),
-                ),
-              ),
-            ),
           ),
           Align(
             alignment: Alignment.center,
-            child: Column(
+            child: isScanning?Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
@@ -66,6 +68,11 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 ),
                 SizedBox(height: 10,),
                 Text("Position the barcode within the frame",style: TextStyle(color: Colors.white,fontSize: 15),)
+              ],
+            ):Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset("assets/images/item_added_success.png",width: 250,height: 250,),
               ],
             ),
           ),

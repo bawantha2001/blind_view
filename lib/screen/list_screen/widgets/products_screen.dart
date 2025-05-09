@@ -1,4 +1,5 @@
 import 'package:blind_view/providers/shopping_provider.dart';
+import 'package:blind_view/services/voice_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voice_to_text/voice_to_text.dart';
@@ -33,6 +34,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         print(_voiceToText.speechResult);
         Provider.of<ShoppingProvider>(context,listen: false).categorizedItems[widget.catergory]!.forEach((element) {
           if(element.itemName!.toLowerCase() == catName.toLowerCase()){
+            VoiceService().speak("${element.itemName} added to the cart");
             Provider.of<ShoppingProvider>(context,listen: false).addItemToCart(element, 1);
           }
         },
@@ -84,40 +86,46 @@ class _ProductsScreenState extends State<ProductsScreen> {
           return GridView.builder(itemCount: shopping.categorizedItems[widget.catergory]?.length??0,gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
             itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(color: Colors.grey.withOpacity(0.4),blurRadius: 1,offset: Offset(-4, 4)),
-                  ]
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(child:
-                  ClipRRect(
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(10),topLeft: Radius.circular(10)),
-                      child: Image.asset("assets/images/test.jpg",fit: BoxFit.cover))),
-                  SizedBox(height: 10,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text("${shopping.categorizedItems[widget.catergory]!.elementAt(index).itemName}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),),
-                            Text("Rs.${shopping.categorizedItems[widget.catergory]!.elementAt(index).itemPrice}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w500),),
-                          ],
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                        ),
-                        Spacer(),
-                        Text("${shopping.categorizedItems[widget.catergory]!.elementAt(index).itemQuantity}",style: TextStyle(color: Colors.red,fontWeight: FontWeight.w800),),
-                        Icon(Icons.add_shopping_cart_rounded)
-                      ],
-                    ),
-                  )
-                ],
+            return GestureDetector(
+              onTap: (){
+                VoiceService().speak("${shopping.categorizedItems[widget.catergory]!.elementAt(index).itemName} added to the Cart");
+                Provider.of<ShoppingProvider>(context,listen: false).addItemToCart(shopping.categorizedItems[widget.catergory]!.elementAt(index), 1);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(color: Colors.grey.withOpacity(0.4),blurRadius: 1,offset: Offset(-4, 4)),
+                    ]
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(child:
+                    ClipRRect(
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(10),topLeft: Radius.circular(10)),
+                        child: Image.asset("assets/images/test.jpg",fit: BoxFit.cover))),
+                    SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Text("${shopping.categorizedItems[widget.catergory]!.elementAt(index).itemName}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),),
+                              Text("Rs.${shopping.categorizedItems[widget.catergory]!.elementAt(index).itemPrice}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w500),),
+                            ],
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                          ),
+                          Spacer(),
+                          Text("${shopping.categorizedItems[widget.catergory]!.elementAt(index).itemQuantity}",style: TextStyle(color: Colors.red,fontWeight: FontWeight.w800),),
+                          Icon(Icons.add_shopping_cart_rounded)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           },);

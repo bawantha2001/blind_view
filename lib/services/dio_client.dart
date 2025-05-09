@@ -33,7 +33,6 @@ class DioClient {
     //     return handler.next(options);
     //   },
     // ));
-
   }
 
 }
