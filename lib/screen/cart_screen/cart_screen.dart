@@ -152,8 +152,7 @@ class _CartScreenState extends State<CartScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset("assets/images/cart_screen.png",width: 250,height: 250,),
-                Text("Your cart is empty"),
+                Image.asset("assets/images/item_added.png",width: 250,height: 250,),
               ],
             ),
           );

@@ -149,7 +149,7 @@ class _ListScreenState extends State<ListScreen> {
                         },
                         ):Column(
                           children: [
-                            Image.asset("assets/images/images.png",width: 250,height: 250,),
+                            Image.asset("assets/images/no_item.png",width: 250,height: 250,),
                           ],
                         );
                       }

@@ -141,8 +141,6 @@ class ShoppingProvider with ChangeNotifier{
     print("saved successfull");
   }
 
-
-
   Future<void> loadCartfav()async{
     final prefs = await SharedPreferences.getInstance();
     final favCartjson = prefs.getString("favCart");
@@ -163,6 +161,6 @@ class ShoppingProvider with ChangeNotifier{
     else{
       print("No Cart Items");
     }
-
   }
+
 }

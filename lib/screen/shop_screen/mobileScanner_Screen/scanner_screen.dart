@@ -72,7 +72,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             ):Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Product Is Added To The Cart",style: TextStyle(color: Colors.blue,fontSize: 15),)
+                Image.asset("assets/images/item_added_success.png",width: 250,height: 250,),
               ],
             ),
           ),
