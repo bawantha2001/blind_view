@@ -165,5 +165,4 @@ class ShoppingProvider with ChangeNotifier{
     }
 
   }
-
 }

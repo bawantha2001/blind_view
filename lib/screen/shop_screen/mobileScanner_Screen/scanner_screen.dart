@@ -1,5 +1,9 @@
+import 'package:blind_view/providers/shopping_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
+
+import '../../../services/voice_service.dart';
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
 
@@ -10,6 +14,8 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
 
   final MobileScannerController _mobileScannerControllercontroller = MobileScannerController();
+
+  bool isScanning = true;
 
   @override
   void dispose() {
@@ -23,15 +29,32 @@ class _ScannerScreenState extends State<ScannerScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          MobileScanner(
-            controller: _mobileScannerControllercontroller,
-            onDetect: (result){
-              print(result.barcodes.first.rawValue);
+          Consumer<ShoppingProvider>(
+            builder: (BuildContext context,shopping, Widget? child) {
+              return MobileScanner(
+                controller: _mobileScannerControllercontroller,
+                onDetect: (result){
+                  String id = result.barcodes.first.rawValue.toString();
+                  shopping.items.forEach((element) {
+                    if(element.itemCode == id){
+                      _mobileScannerControllercontroller.stop().then((onValue){
+                        setState(() {
+                          isScanning = false;
+                        });
+                        Provider.of<ShoppingProvider>(context,listen: false).addItemToCart(element, 1);
+                        VoiceService().speak("${element.itemName} added to the Cart");
+                      });
+
+                    }
+                  },);
+
+                },
+              );
             },
           ),
           Align(
             alignment: Alignment.center,
-            child: Column(
+            child: isScanning?Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
@@ -45,6 +68,11 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 ),
                 SizedBox(height: 10,),
                 Text("Position the barcode within the frame",style: TextStyle(color: Colors.white,fontSize: 15),)
+              ],
+            ):Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Product Is Added To The Cart",style: TextStyle(color: Colors.blue,fontSize: 15),)
               ],
             ),
           ),
