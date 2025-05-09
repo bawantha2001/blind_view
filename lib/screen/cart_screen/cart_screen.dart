@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shake/shake.dart';
@@ -112,9 +113,16 @@ class _CartScreenState extends State<CartScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Flexible(child:
-                    ClipRRect(
-                        borderRadius: BorderRadius.only(topRight: Radius.circular(10),topLeft: Radius.circular(10)),
-                        child: Image.asset("assets/images/test.jpg",fit: BoxFit.cover))),
+                    Center(
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.only(topRight: Radius.circular(10),topLeft: Radius.circular(10)),
+                          child: CachedNetworkImage(
+                            imageUrl: shopping.cart.elementAt(index).itemImage.toString(),
+                            placeholder: (context, url) => Image.asset("assets/images/load.gif",fit: BoxFit.cover),
+                            errorWidget: (context, url, error) => Image.asset("assets/images/no_item.png",fit: BoxFit.fill),
+                            fit: BoxFit.cover,
+                          ),),
+                    )),
                     SizedBox(height: 10,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),

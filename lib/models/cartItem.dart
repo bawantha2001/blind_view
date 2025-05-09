@@ -3,15 +3,17 @@ class CartItem{
   final String? itemName;
   int? itemQuantity;
   int? itemPrice;
+  final String? itemImage;
 
-  CartItem({this.itemCode,this.itemName,this.itemPrice,this.itemQuantity});
+  CartItem({this.itemCode,this.itemName,this.itemPrice,this.itemQuantity,this.itemImage});
 
   factory CartItem.fromJson(Map<String,dynamic> data){
     return CartItem(
         itemCode: data['itemCode'],
         itemName: data['itemName'],
         itemQuantity: data['itemQuantity'],
-        itemPrice: data['itemPrice']
+        itemPrice: data['itemPrice'],
+      itemImage: data['itemImage'],
     );
   }
 
@@ -20,5 +22,6 @@ class CartItem{
     'itemName': itemName,
     'itemPrice': itemPrice,
     'itemQuantity': itemQuantity,
+    'itemImage':itemImage,
   };
 }
