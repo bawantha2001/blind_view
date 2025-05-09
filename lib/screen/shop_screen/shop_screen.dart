@@ -1,5 +1,6 @@
 import 'package:blind_view/providers/shopping_provider.dart';
 import 'package:blind_view/services/voice_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
@@ -68,7 +69,15 @@ class _ShopScreenState extends State<ShopScreen> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Flexible(child: ClipRRect(borderRadius: BorderRadius.only(topRight: Radius.circular(10),topLeft: Radius.circular(10)),child: Image.asset("assets/images/test.jpg",fit: BoxFit.cover))),
+                                      Flexible(child: ClipRRect(borderRadius: BorderRadius.only(topRight: Radius.circular(10),topLeft: Radius.circular(10)),
+                                          child: Center(
+                                            child: CachedNetworkImage(
+                                              imageUrl: shop_item.items[index].itemImage.toString(),
+                                              placeholder: (context, url) => Image.asset("assets/images/load.gif",fit: BoxFit.cover),
+                                              errorWidget: (context, url, error) => Image.asset("assets/images/no_item.png",fit: BoxFit.cover),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),)),
                                       SizedBox(height: 10,),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 8.0),

@@ -1,5 +1,6 @@
 import 'package:blind_view/providers/shopping_provider.dart';
 import 'package:blind_view/services/voice_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voice_to_text/voice_to_text.dart';
@@ -103,9 +104,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Flexible(child:
-                    ClipRRect(
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(10),topLeft: Radius.circular(10)),
-                        child: Image.asset("assets/images/test.jpg",fit: BoxFit.cover))),
+                    Center(
+                      child: ClipRRect(
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(10),topLeft: Radius.circular(10)),
+                          child: CachedNetworkImage(
+                            imageUrl: shopping.categorizedItems[widget.catergory]!.elementAt(index).itemImage.toString(),
+                            placeholder: (context, url) => Image.asset("assets/images/load.gif",fit: BoxFit.cover),
+                            errorWidget: (context, url, error) => Image.asset("assets/images/no_item.png",fit: BoxFit.fill),
+                            fit: BoxFit.cover,
+                          ),),
+                    )),
                     SizedBox(height: 10,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),

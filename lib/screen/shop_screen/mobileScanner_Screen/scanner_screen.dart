@@ -73,6 +73,26 @@ class _ScannerScreenState extends State<ScannerScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset("assets/images/item_added_success.png",width: 250,height: 250,),
+                SizedBox(height: 5,),
+                GestureDetector(
+                  onTap: (){
+                    _mobileScannerControllercontroller.start().then((onValue){
+                      setState(() {
+                        isScanning = true;
+                      });
+                    });
+
+                  },
+                  child: Container(
+                    width: 180,
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                      borderRadius: BorderRadius.circular(15)
+                    ),
+                    child: Center(child: Text("Re Scan Products",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700,color: Colors.white),)),
+                  ),
+                )
               ],
             ),
           ),
