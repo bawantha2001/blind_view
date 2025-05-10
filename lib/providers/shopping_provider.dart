@@ -82,7 +82,8 @@ class ShoppingProvider with ChangeNotifier{
         'itemCode':'${item.itemCode}',
         'itemName':'${item.itemName}',
         'itemQuantity':quantity,
-        'itemPrice':item.itemPrice! * quantity
+        'itemPrice':item.itemPrice! * quantity,
+        'itemImage':item.itemImage
       };
 
       _cart.add(CartItem.fromJson(data));
@@ -106,7 +107,8 @@ class ShoppingProvider with ChangeNotifier{
           'itemCode':'${item.itemCode}',
           'itemName':'${item.itemName}',
           'itemQuantity':quantity,
-          'itemPrice':item.itemPrice! * quantity
+          'itemPrice':item.itemPrice! * quantity,
+          'itemImage':item.itemImage
         };
         _cart.add(CartItem.fromJson(data));
       }

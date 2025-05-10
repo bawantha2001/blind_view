@@ -75,7 +75,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                               imageUrl: shop_item.items[index].itemImage.toString(),
                                               placeholder: (context, url) => Image.asset("assets/images/load.gif",fit: BoxFit.cover),
                                               errorWidget: (context, url, error) => Image.asset("assets/images/no_item.png",fit: BoxFit.cover),
-                                              fit: BoxFit.cover,
+                                              fit: BoxFit.fill,
                                             ),
                                           ),)),
                                       SizedBox(height: 10,),
