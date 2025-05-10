@@ -132,19 +132,24 @@ class _CartScreenState extends State<CartScreen> {
                             children: [
                               Text("${shopping.cart.elementAt(index).itemName}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),),
                               Text("Rs.${shopping.cart.elementAt(index).itemPrice}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w500),),
+                              Text("${shopping.cart.elementAt(index).itemQuantity}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w800),),
                             ],
                             crossAxisAlignment: CrossAxisAlignment.start,
                           ),
                           Spacer(),
                           Row(
                             children: [
-                              Text("${shopping.cart.elementAt(index).itemQuantity}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w800),),
-                              SizedBox(width: 10,),
-                              GestureDetector(
-                                onTap: (){
-                                  Provider.of<ShoppingProvider>(context,listen: false).removeCart(index);
-                                },
-                                  child: Icon(Icons.delete,size: 30,))
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => Provider.of<ShoppingProvider>(context,listen: false).removeCart(index),
+                                      child: Icon(Icons.delete,size: 30,)),
+                                  SizedBox(width: 10,),
+                                  GestureDetector(
+                                    onTap: () => Provider.of<ShoppingProvider>(context,listen: false).editQuantity(index),
+                                      child: Icon(Icons.add)),
+                                ],
+                              )
                             ],
                           ),
                         ],

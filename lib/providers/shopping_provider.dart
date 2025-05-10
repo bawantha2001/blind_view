@@ -125,6 +125,15 @@ class ShoppingProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  void editQuantity(int elementNo){
+    if(_cart != null){
+      VoiceService().speak("${_cart.elementAt(elementNo).itemName} Item Updated");
+      _cart.elementAt(elementNo).itemQuantity = (_cart.elementAt(elementNo).itemQuantity??0) + 1;
+      calculateTotal();
+    }
+    notifyListeners();
+  }
+
   void removeCart(int elementNo){
     if(_cart != null){
       VoiceService().speak("${_cart.elementAt(elementNo).itemName} removed from Cart");
